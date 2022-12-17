@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "Corte"
+  },
+  {
+    "id": 2,
+    "name": "Arte"
+  },
+  {
+    "id": 3,
+    "name": "Venda"
+  },
+  {
+    "id": 4,
+    "name": "Estoque"
+  },
+  {
+    "id": 5,
+    "name": "Costura"
+  },
+  {
+    "id": 6,
+    "name": "Pintura"
+  },
+  {
+    "id": 7,
+    "name": "Acabamento"
+  },
+  {
+    "id": 8,
+    "name": "Design"
+  },
+  {
+    "id": 9,
+    "name": "Divisão"
+  },
+  {
+    "id": 10,
+    "name": "Personalização"
+  }
+]
