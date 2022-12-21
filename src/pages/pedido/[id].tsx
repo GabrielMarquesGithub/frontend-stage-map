@@ -65,11 +65,11 @@ export const getServerSideProps = SSGWithAuthorizationCheck<any>(
     //uso da fetch function
     const requestOrderedJSON =
       await authenticatedFetchFunction<orderedJSONType>(
-        process.env.NEXT_PUBLIC_BASE_URL_ORDERED + "/" + id,
+        process.env.NEXT_PUBLIC_BASE_URL + "/ordered/" + id,
         token
       );
     const requestStageJSON = await authenticatedFetchFunction<stageJSONType>(
-      process.env.NEXT_PUBLIC_BASE_URL_STAGE!,
+      process.env.NEXT_PUBLIC_BASE_URL + "/stage",
       token
     );
 

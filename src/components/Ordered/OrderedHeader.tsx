@@ -24,7 +24,7 @@ const OrderedHeader = ({ title, priority, children }: OrderedHeaderType) => {
     >
       <Heading
         as="h1"
-        fontSize="50"
+        fontSize={["30", "40", "50"]}
         fontWeight="bold"
         textTransform="uppercase"
         lineHeight="200px"

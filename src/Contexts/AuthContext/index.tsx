@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }: AuthProviderPropsType) => {
     const data = { name, password };
     //chamada a API
     const response = await baseFetchFunction<authenticationResponseType>(
-      process.env.NEXT_PUBLIC_BASE_URL_LOGIN!,
+      process.env.NEXT_PUBLIC_BASE_URL + "/login",
       {
         method: "POST",
         body: JSON.stringify(data),
@@ -98,7 +98,7 @@ export const AuthProvider = ({ children }: AuthProviderPropsType) => {
       if (token) {
         //buscando user já autenticando
         const response = await authenticatedFetchFunction<{ user: userType }>(
-          process.env.NEXT_PUBLIC_BASE_URL_ME!,
+          process.env.NEXT_PUBLIC_BASE_URL + "/token",
           getCookies("stageMap.auth.token")
         );
 

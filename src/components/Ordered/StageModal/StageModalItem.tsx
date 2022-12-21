@@ -40,7 +40,7 @@ const StageModalItem = ({ stage }: StageModalItemType) => {
     if (error) actions?.closeError();
     actions?.isLoading();
 
-    const url = process.env.NEXT_PUBLIC_BASE_URL_STAGE + "/" + stage.id;
+    const url = process.env.NEXT_PUBLIC_BASE_URL + "/stage/" + stage.id;
 
     const res = await authenticatedFetchFunction(url, authToken, {
       method: "DELETE",

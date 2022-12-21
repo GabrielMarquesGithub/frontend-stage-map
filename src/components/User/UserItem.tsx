@@ -36,7 +36,7 @@ const UserItem = ({ user }: UserItemType) => {
   const [userModalState, setUserModalState] = useBoolean(false);
 
   const handleDelete = async () => {
-    const url = process.env.NEXT_PUBLIC_BASE_URL_USER + "/" + user.id;
+    const url = process.env.NEXT_PUBLIC_BASE_URL + "/user/" + user.id;
 
     const res = await authenticatedFetchFunction(url, authToken, {
       method: "DELETE",
@@ -110,16 +110,34 @@ const UserItem = ({ user }: UserItemType) => {
         }}
         mb="1"
       >
-        <Flex justifyContent="space-between" alignItems="center" w="100%">
-          <Avatar boxSizing="content-box" border="2px solid" name={user.name} />
-          <UnorderedList styleType="none" mr="10">
-            <ListItem>
-              <span>Nome - {user.name}</span>
-            </ListItem>
-            <ListItem>
-              <span>Email - {user.email}</span>
-            </ListItem>
-          </UnorderedList>
+        <Flex
+          justifyContent="space-between"
+          flexDirection={["column", "row"]}
+          fontSize={["small", "small", "medium"]}
+          gap={["2", "0"]}
+          alignItems="center"
+          w="100%"
+        >
+          <Flex
+            justifyContent="space-between"
+            flexDirection={["column", "row"]}
+            gap={["2", "0"]}
+            alignItems="center"
+          >
+            <Avatar
+              boxSizing="content-box"
+              border="2px solid"
+              name={user.name}
+            />
+            <UnorderedList styleType="none" mr="10">
+              <ListItem>
+                <span>Nome - {user.name}</span>
+              </ListItem>
+              <ListItem>
+                <span>Email - {user.email}</span>
+              </ListItem>
+            </UnorderedList>
+          </Flex>
           <Icon
             cursor="pointer"
             _hover={{

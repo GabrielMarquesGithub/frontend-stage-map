@@ -1,5 +1,4 @@
-import Router from "next/router";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   Button,
   Container,
@@ -14,6 +13,10 @@ import {
   UnorderedList,
   useBoolean,
 } from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+import * as yup from "yup";
 
 import { userType } from "../types/user";
 
@@ -30,7 +33,52 @@ type UserType = {
   users: userType[];
 };
 
+//form data type
+type createUserFormDataType = {
+  name: string;
+  email: string;
+  role: string;
+  password: string;
+  password_confirmation: string;
+};
+
+const schema = yup
+  .object({
+    name: yup.string().required("O Usuário deve ter um nome"),
+    email: yup
+      .string()
+      .email("formato do email incorreto")
+      .required("O Usuário deve ter um Email"),
+    role: yup.string().required("O usuário deve ter uma função atribuída"),
+    password: yup
+      .string()
+      .min(6, "A senha deve possuir no mínimo 6 caracteres")
+      .required("O Usuário deve ter uma senha"),
+    password_confirmation: yup
+      .string()
+      .oneOf([yup.ref("password"), null], "As senhas devem ser iguais"),
+  })
+  .required();
+
 const User = ({ users }: UserType) => {
+  //validação de formulário
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<createUserFormDataType>({
+    resolver: yupResolver(schema),
+    mode: "onSubmit",
+  });
+
+  //personal error
+  const [apiError, setApiError] = useState("");
+  //loading
+  const [isLoading, setIsLoading] = useBoolean(false);
+
+  //estado dos items do componente
+  const [usersState, setUsersState] = useState(users);
+
   //manipulação de cookies
   const { getCookies } = buildCookiesActions(undefined);
   const authToken = getCookies("stageMap.auth.token");
@@ -38,35 +86,33 @@ const User = ({ users }: UserType) => {
   //controle modal
   const [userModalState, setUserModalState] = useBoolean(false);
 
-  const userNameInput = useRef<HTMLInputElement>(null);
-  const userRoleInput = useRef<HTMLSelectElement>(null);
-  const userEmailInput = useRef<HTMLInputElement>(null);
-  const userPasswordInput = useRef<HTMLInputElement>(null);
+  const handleCreate = async (data: createUserFormDataType) => {
+    setIsLoading.on();
+    setApiError("");
+    const url = process.env.NEXT_PUBLIC_BASE_URL + "/user";
 
-  const handleCreate = async () => {
-    const url = process.env.NEXT_PUBLIC_BASE_URL_USER!;
-
-    const data = {
-      name: userNameInput.current?.value,
-      email: userEmailInput.current?.value,
-      role: userRoleInput.current?.value,
-      password: userPasswordInput.current?.value,
-      password_confirmation: userPasswordInput.current?.value,
+    type userJSONType = {
+      user: userType;
     };
 
-    console.log(data);
-
-    const res = await authenticatedFetchFunction(url, authToken, {
+    const res = await authenticatedFetchFunction<userJSONType>(url, authToken, {
+      headers: {
+        "Content-Length": "<length>",
+      },
       method: "POST",
       body: JSON.stringify(data),
     });
 
     //lidando com possíveis erros na requisição
-    if (res.status === 409) {
+    if (res.errors || !res.data || !res.data.user) {
+      setIsLoading.off();
+      return setApiError("Usuário ou Email já existentes");
     }
-    if (res.errors) {
-    }
-    Router.reload();
+
+    setUsersState([...usersState, res.data.user]);
+
+    setUserModalState.off();
+    setIsLoading.off();
   };
 
   return (
@@ -93,38 +139,49 @@ const User = ({ users }: UserType) => {
             gap="2"
           >
             <Input
-              name="userName"
-              ref={userNameInput}
+              error={errors.name?.message || apiError}
               type="text"
               placeholder="Nome"
+              {...register("name")}
             />
             <Select
               bg="gray.700"
-              ref={userRoleInput}
               colorScheme="purple"
               variant="filled"
               focusBorderColor="pink.500"
               _hover={{}}
               sx={{ option: { background: "gray.700" } }}
+              {...register("role")}
             >
               <option value="admin">Admin</option>
               <option value="user">Funcionário</option>
             </Select>
             <Input
-              name="userEmail"
-              ref={userEmailInput}
+              error={errors.email?.message || apiError}
               type="email"
               placeholder="Email"
+              {...register("email")}
             />
             <Input
-              name="userPassword"
-              ref={userPasswordInput}
+              error={errors.password?.message}
               type="password"
               placeholder="Senha"
+              {...register("password")}
+            />
+            <Input
+              error={errors.password_confirmation?.message}
+              type="password"
+              placeholder="Confirme a Senha"
+              {...register("password_confirmation")}
             />
           </ModalBody>
           <ModalFooter display="flex" gap="2" p="0" m="15px">
-            <Button colorScheme="pink" onClick={handleCreate} w="100%">
+            <Button
+              isLoading={isLoading}
+              colorScheme="pink"
+              onClick={handleSubmit(handleCreate)}
+              w="100%"
+            >
               Criar
             </Button>
           </ModalFooter>
@@ -141,8 +198,8 @@ const User = ({ users }: UserType) => {
             Novo Usuário
           </Button>
           <UnorderedList styleType="none" m="0">
-            {users.map((user) => (
-              <UserItem key={user.id} user={user} />
+            {usersState.map((usersState) => (
+              <UserItem key={usersState.id} user={usersState} />
             ))}
           </UnorderedList>
         </DarkContainer>

@@ -43,7 +43,7 @@ const StageModal = ({ ...rest }: StageModalType) => {
     if (error) actions?.closeError();
     actions?.isLoading();
 
-    const url = process.env.NEXT_PUBLIC_BASE_URL_STAGE!;
+    const url = process.env.NEXT_PUBLIC_BASE_URL + "/stage";
 
     const data = { name: textInput.current.value ?? "" };
     //definições para requisição

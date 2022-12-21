@@ -20,6 +20,13 @@ export default async function authenticatedFetchFunction<T>(
     },
   };
 
+  if (options && options.headers) {
+    options.headers = Object.assign(
+      options.headers,
+      authenticatedHeader.headers
+    );
+  }
+
   options = Object.assign(authenticatedHeader, options);
   //chamando fetch
   const response = await baseFetchFunction<T>(url, options);

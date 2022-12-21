@@ -41,7 +41,7 @@ export const getServerSideProps = SSGWithAuthorizationCheck<any>(
 
     //uso da fetch function
     const requestJSON = await authenticatedFetchFunction<userJSONType>(
-      process.env.NEXT_PUBLIC_BASE_URL_USER!,
+      process.env.NEXT_PUBLIC_BASE_URL + "/user",
       token
     );
 

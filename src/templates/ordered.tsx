@@ -102,17 +102,18 @@ const Ordered = () => {
     };
 
     //atualizando informação não vindas de forms no data
-    data = { ...data, stage: ordered.stage, user_id: 1 };
+    data = { ...data, stage: ordered.stage };
     const url = createPage
-      ? process.env.NEXT_PUBLIC_BASE_URL_ORDERED!
-      : process.env.NEXT_PUBLIC_BASE_URL_ORDERED + "/" + ordered.id;
+      ? process.env.NEXT_PUBLIC_BASE_URL + "/ordered"
+      : process.env.NEXT_PUBLIC_BASE_URL + "/ordered/" + ordered.id;
     const method = createPage ? "POST" : "PUT";
+
     const res = await authenticatedFetchFunction<orderedJSONType>(
       url,
       authToken,
       {
         method: method,
-        body: JSON.stringify({ ...data, stage: ordered.stage, user_id: 1 }),
+        body: JSON.stringify({ ...data, stage: ordered.stage }),
       }
     );
 
@@ -140,9 +141,11 @@ const Ordered = () => {
     if (createPage) return;
     if (error) actions?.closeError();
 
-    const url = process.env.NEXT_PUBLIC_BASE_URL_ORDERED + "/" + ordered.id;
+    const url = process.env.NEXT_PUBLIC_BASE_URL + "/ordered/" + ordered.id;
 
-    const res = await authenticatedFetchFunction(url, authToken);
+    const res = await authenticatedFetchFunction(url, authToken, {
+      method: "DELETE",
+    });
 
     //lidando com possíveis erros na requisição
     if (res.errors) {
@@ -193,7 +196,12 @@ const Ordered = () => {
         </ModalContent>
       </Modal>
 
-      <Container as="main" maxW="container.lg" p="8">
+      <Container
+        as="main"
+        maxW="container.lg"
+        p="8"
+        sx={{ input: { fontSize: ["small", "small", "medium"] } }}
+      >
         <OrderedHeader title={ordered.title} priority={ordered.priority}>
           {editable && (
             <IconButton
@@ -255,23 +263,27 @@ const Ordered = () => {
           </Alert>
         )}
 
-        <DarkBox
-          animation={apearAnimation({ milliseconds: 400 })}
-          mt="3"
-          borderRadius="md"
-        >
-          <StageSectionContainer />
-        </DarkBox>
+        {!createPage && (
+          <DarkBox
+            animation={apearAnimation({ milliseconds: 400 })}
+            mt="3"
+            borderRadius="md"
+          >
+            <StageSectionContainer />
+          </DarkBox>
+        )}
 
         <Grid
           animation={apearAnimation({ milliseconds: 600 })}
           mt="3"
-          gridTemplateColumns="60% 38%"
+          gridTemplateColumns={
+            createPage ? "100%" : ["100%", "100%", "60% 38%"]
+          }
           justifyContent="space-between"
           gap="2%"
         >
           <DarkBox borderRadius="md">
-            <Heading as="h3" fontSize="2xl" mb="5">
+            <Heading as="h3" fontSize="2xl">
               Cliente
             </Heading>
             <ClientForm
@@ -280,9 +292,12 @@ const Ordered = () => {
               register={register}
             />
           </DarkBox>
-          <DarkBox borderRadius="md">
-            <ImageContainer />
-          </DarkBox>
+
+          {!createPage && (
+            <DarkBox borderRadius="md">
+              <ImageContainer />
+            </DarkBox>
+          )}
         </Grid>
 
         <DarkBox

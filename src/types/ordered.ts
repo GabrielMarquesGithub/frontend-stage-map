@@ -18,10 +18,9 @@ export type orderedType = {
     email: string;
     fone: string;
   };
-  image: {
+  images: {
     id: number;
     url: string;
-    title: string;
   }[];
   stage: stageType[] | null;
 };

@@ -24,7 +24,7 @@ const OrderedForm = ({ disabled, errors, register }: OrderedFormType) => {
         isDisabled={disabled}
         {...register("title")}
       />
-      <Flex flexDirection="row" gap="2">
+      <Flex flexDirection={["column", "row"]} gap="2">
         <Input
           error={errors.prediction?.message}
           mt="-10px"
@@ -42,7 +42,7 @@ const OrderedForm = ({ disabled, errors, register }: OrderedFormType) => {
           {...register("deadline")}
         />
       </Flex>
-      <Flex flexDirection="row" gap="2">
+      <Flex flexDirection={["column", "row"]} gap="2">
         <Input
           error={errors.created_at?.message}
           mt="-10px"

@@ -34,8 +34,6 @@ const StageSectionItem = ({ stage }: StageSectionItemType) => {
   const { getCookies } = buildCookiesActions(undefined);
   const authToken = getCookies("stageMap.auth.token");
 
-  //temp data
-  const [tempStage, setTempStage] = useState(stage);
   const {
     id,
     name,
@@ -44,7 +42,17 @@ const StageSectionItem = ({ stage }: StageSectionItemType) => {
   const { state, actions } = useContext(OrderedPageContext);
   const {
     pageStates: { editable, error, isLoading },
+    data: {
+      ordered: { id: ordered_id },
+    },
   } = state;
+
+  //temp data
+  const [tempStage, setTempStage] = useState({
+    ...stage,
+    pivot: { ...stage.pivot, ordered_id, stage_id: stage.id },
+  });
+
   //############### remove stage action ###############
   const handleRemoveStage = () => actions?.removeStage(id);
 
@@ -69,11 +77,12 @@ const StageSectionItem = ({ stage }: StageSectionItemType) => {
   };
   const handleUpdateStage = async () => {
     if (error) actions?.closeError();
+    actions?.isLoading();
 
     //atualizando informação não vindas de forms no data
     const data = tempStage;
-    console.log(data);
-    const url = process.env.NEXT_PUBLIC_BASE_URL_PIVOT!;
+
+    const url = process.env.NEXT_PUBLIC_BASE_URL + "/pivot";
     const res = await authenticatedFetchFunction(url, authToken, {
       method: "PUT",
       body: JSON.stringify(data),
@@ -86,6 +95,7 @@ const StageSectionItem = ({ stage }: StageSectionItemType) => {
       setStageModalState.off();
       actions?.updateOrderedStage(tempStage);
     }
+    actions?.notLoading();
   };
 
   //controle modal

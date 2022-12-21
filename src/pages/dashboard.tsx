@@ -49,7 +49,7 @@ export const getServerSideProps = SSGWithAuthorizationCheck<any>(
 
     //uso da fetch function
     const requestJSON = await authenticatedFetchFunction<orderedCartJSONType>(
-      process.env.NEXT_PUBLIC_BASE_URL_ORDERED + "?page=" + page,
+      process.env.NEXT_PUBLIC_BASE_URL + "/ordered?page=" + page,
       token
     );
 
