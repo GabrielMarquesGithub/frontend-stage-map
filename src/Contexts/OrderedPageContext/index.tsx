@@ -76,10 +76,9 @@ const initialReducerValue: stateType = {
         fone: "",
         email: "",
       },
-      image: [
+      images: [
         {
           id: 0,
-          title: "",
           url: "",
         },
       ],
