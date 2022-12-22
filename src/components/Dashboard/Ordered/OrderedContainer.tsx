@@ -16,15 +16,17 @@ const OrderedContainer = ({
     <>
       <Grid templateColumns="repeat(auto-fit, minmax(200px, 1fr))" gap="2">
         <CreateOrderedButton />
-        {ordered.map((orderedItem) => (
+        {ordered?.map((orderedItem) => (
           <OrderedItem key={orderedItem.id} {...orderedItem} />
         ))}
       </Grid>
-      <Pagination
-        itemsQuantity={orderedQuantity}
-        itemsPerPage={11}
-        pageRangeDisplayed={2}
-      />
+      {orderedQuantity && (
+        <Pagination
+          itemsQuantity={orderedQuantity}
+          itemsPerPage={11}
+          pageRangeDisplayed={2}
+        />
+      )}
     </>
   );
 };

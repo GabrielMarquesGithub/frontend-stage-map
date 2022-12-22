@@ -53,6 +53,8 @@ export const getServerSideProps = SSGWithAuthorizationCheck<any>(
       token
     );
 
+    let data;
+
     //tratamento de erros
     try {
       //erros vindo da requisição
@@ -66,13 +68,15 @@ export const getServerSideProps = SSGWithAuthorizationCheck<any>(
         !requestJSON.data.meta ||
         !requestJSON.data.meta.total
       ) {
-        throw ErrorsCodes.BAD_REQUEST;
+        data = null;
+      } else {
+        //tradução dos dados recebidos ao formato ideal para consumo
+        data = {
+          ordered: requestJSON.data.data,
+          orderedQuantity: requestJSON.data.meta.total,
+        };
       }
-      //tradução dos dados recebidos ao formato ideal para consumo
-      const data = {
-        ordered: requestJSON.data.data,
-        orderedQuantity: requestJSON.data.meta.total,
-      };
+
       return {
         props: {
           data,
