@@ -114,32 +114,35 @@ const StageSectionItem = ({ stage }: StageSectionItemType) => {
           <ModalHeader textAlign="center" as="h2" textTransform="uppercase">
             {name}
           </ModalHeader>
-          <ModalBody
-            w="full"
-            display="grid"
-            gridTemplateColumns="35% 60%"
-            justifyContent="space-between"
-          >
-            <RadioGroup
-              colorScheme="pink"
-              defaultValue={status}
-              onChange={handleChangeCheck}
+          {!editable && (
+            <ModalBody
+              w="full"
+              display="grid"
+              gridTemplateColumns="35% 60%"
+              justifyContent="space-between"
             >
-              <Stack display="flex" gap="2" justifyContent="center" h="full">
-                <Radio value="NOT_STARTED">Não Iniciado</Radio>
-                <Radio value="PROGRESS">Em Progresso</Radio>
-                <Radio value="COMPLETE">Concluído</Radio>
-                <Radio value="STOPPED" colorScheme="red">
-                  Parado
-                </Radio>
-              </Stack>
-            </RadioGroup>
-            <Textarea
-              onChange={(e) => handleChangeObservation(e.target.value)}
-              defaultValue={observation}
-              name="Observation"
-            />
-          </ModalBody>
+              <RadioGroup
+                colorScheme="pink"
+                defaultValue={status}
+                onChange={handleChangeCheck}
+              >
+                <Stack display="flex" gap="2" justifyContent="center" h="full">
+                  <Radio value="NOT_STARTED">Não Iniciado</Radio>
+                  <Radio value="PROGRESS">Em Progresso</Radio>
+                  <Radio value="COMPLETE">Concluído</Radio>
+                  <Radio value="STOPPED" colorScheme="red">
+                    Parado
+                  </Radio>
+                </Stack>
+              </RadioGroup>
+              <Textarea
+                onChange={(e) => handleChangeObservation(e.target.value)}
+                defaultValue={observation}
+                name="Observation"
+              />
+            </ModalBody>
+          )}
+
           <ModalFooter justifyContent="center" gap="2">
             {editable && (
               <Button

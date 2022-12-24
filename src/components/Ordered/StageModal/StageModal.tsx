@@ -106,7 +106,7 @@ const StageModal = ({ ...rest }: StageModalType) => {
             ref={textInput}
             name="stageName"
             type="text"
-            placeholder="Nome do stage"
+            placeholder="Nome do estágio"
           />
           <Button
             isLoading={isLoading}
@@ -114,7 +114,7 @@ const StageModal = ({ ...rest }: StageModalType) => {
             _hover={{ bg: "pink.600" }}
             onClick={handleCreate}
           >
-            Add Estagio
+            Add Estágio
           </Button>
         </ModalFooter>
       </ModalContent>

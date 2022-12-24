@@ -1,4 +1,4 @@
-import { Flex, Icon } from "@chakra-ui/react";
+import { Flex, Heading, Icon } from "@chakra-ui/react";
 import { IconType } from "react-icons/lib";
 
 import { orderedCardType } from "../../../types/ordered";
@@ -9,7 +9,15 @@ type OrderedItemHeaderType = Pick<orderedCardType, "priority" | "title">;
 const OrderedItemHeader = ({ priority, title }: OrderedItemHeaderType) => {
   return (
     <Flex as="header" alignItems="center" justifyContent="space-between">
-      <h3>{title}</h3>
+      <Heading
+        fontSize="normal"
+        as="h3"
+        overflow="hidden"
+        whiteSpace="nowrap"
+        textOverflow="ellipsis"
+      >
+        {title}
+      </Heading>
       <Icon
         fontSize="x-large"
         as={orderedIcons[priority] as unknown as IconType}

@@ -4,7 +4,7 @@ const schema = yup
   .object({
     title: yup
       .string()
-      .max(20, "O titulo pod ter até 20 caracteres")
+      .max(20, "O titulo pode ter até 20 caracteres")
       .required("Deve existir um titulo"),
     prediction: yup
       .date()
@@ -14,7 +14,7 @@ const schema = yup
     deadline: yup
       .date()
       .typeError("Deve existir uma data limite")
-      .min(new Date(), "A data limite não poder ser menor que a atual")
+      .min(new Date(), "A data limite não pode ser menor que a atual")
       .required("Deve existir uma data limite"),
     created_at: yup.date(),
     updated_at: yup.date(),

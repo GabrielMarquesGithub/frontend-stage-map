@@ -11,7 +11,12 @@ type OrderedItemBodyType = Pick<orderedCardType, "client" | "deadline">;
 const OrderedItemBody = ({ client, deadline }: OrderedItemBodyType) => {
   return (
     <List spacing="3">
-      <ListItem>
+      <ListItem
+        w="100%"
+        overflow="hidden"
+        whiteSpace="nowrap"
+        textOverflow="ellipsis"
+      >
         <ListIcon as={BsFillPersonFill} />
         <span>{client.name}</span>
       </ListItem>

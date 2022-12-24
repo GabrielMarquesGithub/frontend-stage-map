@@ -80,14 +80,28 @@ export const AuthProvider = ({ children }: AuthProviderPropsType) => {
     return true;
   };
 
-  //funções para logoff
+  //funções para logout
   const signOut = useCallback(() => {
+    (async () => {
+      //desestruturando em busca de cookies
+      const token = getCookies("stageMap.auth.token");
+
+      //realizando logout no sanctum
+      await authenticatedFetchFunction(
+        process.env.NEXT_PUBLIC_BASE_URL + "/logout",
+        token,
+        {
+          method: "POST",
+        }
+      );
+    })();
+
     //destruição de cookies
     deleteCookie("stageMap.auth.token");
     //removendo user
     setUser(null);
     Router.push("/");
-  }, [deleteCookie]);
+  }, [getCookies, deleteCookie]);
 
   //função de atualização dos dados
   useEffect(() => {
