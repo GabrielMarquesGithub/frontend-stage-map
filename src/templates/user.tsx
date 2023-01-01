@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Button,
   Container,
@@ -79,6 +79,8 @@ const User = ({ users }: UserType) => {
   //estado dos items do componente
   const [usersState, setUsersState] = useState(users);
 
+  const [sectors, setSectors] = useState<{ sector: string }[]>();
+
   //manipulação de cookies
   const { getCookies } = buildCookiesActions(undefined);
   const authToken = getCookies("stageMap.auth.token");
@@ -92,32 +94,57 @@ const User = ({ users }: UserType) => {
     const url = process.env.NEXT_PUBLIC_BASE_URL + "/user";
 
     type userJSONType = {
-      user: userType;
+      data: {
+        user: userType;
+      };
     };
 
     const res = await authenticatedFetchFunction<userJSONType>(url, authToken, {
-      headers: {
-        "Content-Length": "<length>",
-      },
       method: "POST",
       body: JSON.stringify(data),
     });
 
     //lidando com possíveis erros na requisição
-    if (res.errors || !res.data || !res.data.user) {
+    if (res.errors || !res.data || !res.data.data || !res.data.data.user) {
       setIsLoading.off();
       return setApiError("Usuário ou Email já existentes");
     }
 
-    setUsersState([...usersState, res.data.user]);
+    setUsersState([...usersState, res.data.data.user]);
 
     setUserModalState.off();
     setIsLoading.off();
   };
 
+  useEffect(() => {
+    (async () => {
+      const url = process.env.NEXT_PUBLIC_BASE_URL + "/sector";
+      const method = "GET";
+
+      type sectorJSONType = {
+        data: {
+          sector: string;
+        }[];
+      };
+
+      const res = await authenticatedFetchFunction<sectorJSONType>(
+        url,
+        authToken,
+        {
+          method: method,
+        }
+      );
+
+      //lidando com possíveis erros na requisição
+      if (res.errors || !res.data || !res.data.data) {
+      } else {
+        setSectors(res.data.data);
+      }
+    })();
+  }, []);
+
   return (
     <>
-      {" "}
       <Modal isOpen={userModalState} onClose={setUserModalState.off} isCentered>
         <ModalOverlay />
         <ModalContent bgColor="gray.900">
@@ -153,8 +180,11 @@ const User = ({ users }: UserType) => {
               sx={{ option: { background: "gray.700" } }}
               {...register("role")}
             >
-              <option value="admin">Admin</option>
-              <option value="user">Funcionário</option>
+              {sectors?.map((sector, index) => (
+                <option key={index} value={sector.sector}>
+                  {sector.sector}
+                </option>
+              ))}
             </Select>
             <Input
               error={errors.email?.message || apiError}

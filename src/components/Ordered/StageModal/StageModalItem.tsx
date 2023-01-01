@@ -117,14 +117,25 @@ const StageModalItem = ({ stage }: StageModalItemType) => {
           w="full"
           p="10px"
         >
-          <Text
-            maxW="180px"
-            overflow="hidden"
-            whiteSpace="nowrap"
-            textOverflow="ellipsis"
-          >
-            {stage.name}
-          </Text>
+          <Box>
+            <Text
+              maxW="180px"
+              overflow="hidden"
+              whiteSpace="nowrap"
+              textOverflow="ellipsis"
+            >
+              Nome: {stage.name}
+            </Text>
+            <Text
+              maxW="180px"
+              overflow="hidden"
+              whiteSpace="nowrap"
+              textOverflow="ellipsis"
+              mr="-25px"
+            >
+              Setor: {stage.sector}
+            </Text>
+          </Box>
           <Icon
             cursor="pointer"
             _hover={{

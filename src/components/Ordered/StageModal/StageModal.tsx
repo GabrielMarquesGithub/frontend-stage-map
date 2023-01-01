@@ -1,4 +1,4 @@
-import { useContext, useRef } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import {
   Button,
   Grid,
@@ -10,6 +10,7 @@ import {
   ModalHeader,
   ModalOverlay,
   ModalProps,
+  Select,
 } from "@chakra-ui/react";
 
 import Input from "../../Form/Input";
@@ -25,7 +26,11 @@ type StageModalType = Pick<ModalProps, "isOpen" | "onClose">;
 const StageModal = ({ ...rest }: StageModalType) => {
   //manipulação de cookies
   const { getCookies } = buildCookiesActions(undefined);
-  const authToken = getCookies("stageMap.auth.token");
+  const authToken = useCallback(
+    () => getCookies("stageMap.auth.token"),
+    [getCookies]
+  )();
+  const [sectors, setSectors] = useState<{ sector: string }[]>();
 
   //dados
   const { state, actions } = useContext(OrderedPageContext);
@@ -36,16 +41,23 @@ const StageModal = ({ ...rest }: StageModalType) => {
 
   //############### create action ###############
   const textInput = useRef<HTMLInputElement>(null);
+  const selectInput = useRef<HTMLSelectElement>(null);
+
   const handleCreate = async () => {
     if (!editable) return;
     if (!textInput.current) return;
     if (!textInput.current.value) return;
+    if (!selectInput.current) return;
+    if (!selectInput.current.value) return;
     if (error) actions?.closeError();
     actions?.isLoading();
 
     const url = process.env.NEXT_PUBLIC_BASE_URL + "/stage";
 
-    const data = { name: textInput.current.value ?? "" };
+    const data = {
+      name: textInput.current.value ?? "",
+      sector: selectInput.current.value,
+    };
     //definições para requisição
     type stageJSONType = {
       data: stageType;
@@ -70,6 +82,34 @@ const StageModal = ({ ...rest }: StageModalType) => {
       actions?.notLoading();
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      const url = process.env.NEXT_PUBLIC_BASE_URL + "/sector";
+      const method = "GET";
+
+      type sectorJSONType = {
+        data: {
+          sector: string;
+        }[];
+      };
+
+      const res = await authenticatedFetchFunction<sectorJSONType>(
+        url,
+        authToken,
+        {
+          method: method,
+        }
+      );
+
+      //lidando com possíveis erros na requisição
+      if (res.errors || !res.data || !res.data.data) {
+        actions?.displayError();
+      } else {
+        setSectors(res.data.data);
+      }
+    })();
+  }, []);
 
   return (
     <Modal isCentered {...rest}>
@@ -100,7 +140,13 @@ const StageModal = ({ ...rest }: StageModalType) => {
             ))}
           </Grid>
         </ModalBody>
-        <ModalFooter display="flex" gap="2" p="0" m="15px">
+        <ModalFooter
+          display="flex"
+          flexDirection="column"
+          gap="2"
+          p="0"
+          m="15px"
+        >
           <Input
             isDisabled={isLoading}
             ref={textInput}
@@ -108,7 +154,23 @@ const StageModal = ({ ...rest }: StageModalType) => {
             type="text"
             placeholder="Nome do estágio"
           />
+          <Select
+            ref={selectInput}
+            bg="gray.700"
+            colorScheme="purple"
+            variant="filled"
+            focusBorderColor="pink.500"
+            _hover={{}}
+            sx={{ option: { background: "gray.700" } }}
+          >
+            {sectors?.map((sector, index) => (
+              <option key={index} value={sector.sector}>
+                {sector.sector}
+              </option>
+            ))}
+          </Select>
           <Button
+            w="100%"
             isLoading={isLoading}
             bg="pink.500"
             _hover={{ bg: "pink.600" }}

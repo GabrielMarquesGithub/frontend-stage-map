@@ -4,6 +4,7 @@ export type orderedType = {
   deadline: string;
   prediction: string;
   description: string;
+  products: string;
   priority: "URGENT" | "HIGH" | "NORMAL" | "LOW" | "COMPLETE";
   created_at: string;
   updated_at: string;
@@ -29,6 +30,7 @@ export type orderedType = {
 export type stageType = {
   id: number;
   name: string;
+  sector: string;
   pivot: stagePivotType;
 };
 export type stagePivotType = {
@@ -39,7 +41,7 @@ export type stagePivotType = {
 // dados dos cards
 export type orderedCardType = Pick<
   orderedType,
-  "id" | "title" | "deadline" | "priority" | "client"
+  "id" | "title" | "deadline" | "priority" | "client" | "stage"
 >;
 
 // dados vindos da API

@@ -59,6 +59,7 @@ const initialReducerValue: stateType = {
     ordered: {
       id: 0,
       title: "",
+      products: "",
       prediction: "",
       deadline: "",
       created_at: dateTimeToDate(new Date().toISOString()),

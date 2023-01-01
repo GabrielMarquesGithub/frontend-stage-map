@@ -21,6 +21,9 @@ const schema = yup
     description: yup
       .string()
       .max(1000, "A descrição pode ter no máximo 1000 caracteres"),
+    products: yup
+      .string()
+      .max(1000, "A descrição pode ter no máximo 1000 caracteres"),
     client: yup
       .object({
         name: yup

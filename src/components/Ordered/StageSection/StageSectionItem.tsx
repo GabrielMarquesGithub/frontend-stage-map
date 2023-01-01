@@ -37,6 +37,7 @@ const StageSectionItem = ({ stage }: StageSectionItemType) => {
   const {
     id,
     name,
+    sector,
     pivot: { status, observation },
   } = stage;
   const { state, actions } = useContext(OrderedPageContext);
@@ -111,8 +112,15 @@ const StageSectionItem = ({ stage }: StageSectionItemType) => {
         <ModalOverlay />
         <ModalContent bgColor="gray.900">
           <ModalCloseButton />
-          <ModalHeader textAlign="center" as="h2" textTransform="uppercase">
-            {name}
+          <ModalHeader
+            display="flex"
+            flexDirection="column"
+            textAlign="center"
+            as="h2"
+            textTransform="uppercase"
+          >
+            <span>{name}</span>
+            <span>Setor - {sector}</span>
           </ModalHeader>
           {!editable && (
             <ModalBody

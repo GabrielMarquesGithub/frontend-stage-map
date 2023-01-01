@@ -103,7 +103,7 @@ const Ordered = () => {
 
     //atualizando informação não vindas de forms no data
     data = { ...data, stage: ordered.stage };
-
+    console.log(data);
     const url = createPage
       ? process.env.NEXT_PUBLIC_BASE_URL + "/ordered"
       : process.env.NEXT_PUBLIC_BASE_URL + "/ordered/" + ordered.id;

@@ -15,6 +15,7 @@ const OrderedItem = ({
   deadline,
   priority,
   client,
+  stage,
 }: OrderedItemType) => {
   const { push } = useRouter();
 
@@ -41,7 +42,7 @@ const OrderedItem = ({
     >
       <Flex gap="4" flexDirection="column">
         <OrderedItemHeader priority={priority} title={title} />
-        <OrderedItemBody client={client} deadline={deadline} />
+        <OrderedItemBody client={client} deadline={deadline} stage={stage} />
       </Flex>
     </GridItem>
   );

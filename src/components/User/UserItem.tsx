@@ -84,6 +84,12 @@ const UserItem = ({ user }: UserItemType) => {
               type="email"
               defaultValue={user.email}
             />
+            <Input
+              isDisabled
+              name="userEmail"
+              type="email"
+              defaultValue={user.role}
+            />
           </ModalBody>
           <ModalFooter display="flex" gap="2" p="0" m="15px">
             <Button colorScheme="red" onClick={handleDelete} w="100%">
@@ -135,6 +141,9 @@ const UserItem = ({ user }: UserItemType) => {
               </ListItem>
               <ListItem>
                 <span>Email - {user.email}</span>
+              </ListItem>
+              <ListItem>
+                <span>Setor - {user.role}</span>
               </ListItem>
             </UnorderedList>
           </Flex>

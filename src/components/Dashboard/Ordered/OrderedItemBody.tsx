@@ -1,16 +1,23 @@
 import { Input, List, ListIcon, ListItem } from "@chakra-ui/react";
 
-import { BsFillCalendar2EventFill, BsFillPersonFill } from "react-icons/bs";
+import {
+  BsFillCalendar2EventFill,
+  BsFillPersonFill,
+  BsFillGearFill,
+} from "react-icons/bs";
 
 import { orderedCardType } from "../../../types/ordered";
 
 import dateTimeToDate from "../../../utils/converters/dateTimeToDate";
 
-type OrderedItemBodyType = Pick<orderedCardType, "client" | "deadline">;
+type OrderedItemBodyType = Pick<
+  orderedCardType,
+  "client" | "deadline" | "stage"
+>;
 
-const OrderedItemBody = ({ client, deadline }: OrderedItemBodyType) => {
+const OrderedItemBody = ({ client, deadline, stage }: OrderedItemBodyType) => {
   return (
-    <List spacing="3">
+    <List spacing="0" fontSize="small">
       <ListItem
         w="100%"
         overflow="hidden"
@@ -24,6 +31,7 @@ const OrderedItemBody = ({ client, deadline }: OrderedItemBodyType) => {
         <ListIcon as={BsFillCalendar2EventFill} />
         <Input
           type="date"
+          fontSize="small"
           display="inline"
           maxW="150px"
           p="0"
@@ -36,6 +44,19 @@ const OrderedItemBody = ({ client, deadline }: OrderedItemBodyType) => {
           defaultValue={dateTimeToDate(deadline)}
         />
       </ListItem>
+      {stage && stage.length > 0 && (
+        <ListItem
+          w="100%"
+          overflow="hidden"
+          whiteSpace="nowrap"
+          textOverflow="ellipsis"
+        >
+          <ListIcon as={BsFillGearFill} />
+          {stage.map((stage, index) =>
+            index === 0 ? stage.name : ", " + stage.name
+          )}
+        </ListItem>
+      )}
     </List>
   );
 };

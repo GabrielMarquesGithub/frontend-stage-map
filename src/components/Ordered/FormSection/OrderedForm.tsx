@@ -24,6 +24,7 @@ const OrderedForm = ({ disabled, errors, register }: OrderedFormType) => {
         isDisabled={disabled}
         {...register("title")}
       />
+
       <Flex flexDirection={["column", "row"]} gap="2">
         <Input
           error={errors.prediction?.message}
@@ -60,6 +61,14 @@ const OrderedForm = ({ disabled, errors, register }: OrderedFormType) => {
           {...register("updated_at")}
         />
       </Flex>
+      <Textarea
+        error={errors.products?.message}
+        mt="-10px"
+        maxH="100px"
+        label="Produtos"
+        isDisabled={disabled}
+        {...register("products")}
+      />
       <Textarea
         error={errors.description?.message}
         mt="-10px"

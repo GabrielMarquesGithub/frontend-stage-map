@@ -4,7 +4,7 @@ const nextConfig = {
   swcMinify: true,
   images: {
     //adicionar domínios onde é permitido a realização de importações para imagens
-    domains: ["127.0.0.1"],
+    domains: ["127.0.0.1", "terrafertil.online"],
   },
 };
 
